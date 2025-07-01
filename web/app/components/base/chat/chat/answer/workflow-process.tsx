@@ -70,7 +70,9 @@ const WorkflowProcessItem = ({
           )
         }
         <div className={cn('system-xs-medium text-text-secondary', !collapse && 'grow')}>
-          {t('workflow.common.workflowProcess')}
+            {
+              running && ('思考中') || succeeded && ('回答如下') || failed && ('检索失败')
+             }
         </div>
         {!readonly && <RiArrowRightSLine className={cn('ml-1 h-4 w-4 text-text-tertiary', !collapse && 'rotate-90')} />}
       </div>

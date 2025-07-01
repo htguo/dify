@@ -92,7 +92,8 @@ const Chatbot = () => {
         )}
         style={isMobile ? Object.assign({}, CssTransform(themeBuilder?.theme?.backgroundHeaderColorStyle ?? '')) : {}}
       >
-        <Header
+       {/*
+         <Header
           isMobile={isMobile}
           allowResetChat={allowResetChat}
           title={site?.title || ''}
@@ -100,6 +101,7 @@ const Chatbot = () => {
           theme={themeBuilder?.theme}
           onCreateNewChat={handleNewConversation}
         />
+         */}
         <div className={cn('flex grow flex-col overflow-y-auto', isMobile && '!h-[calc(100vh_-_3rem)] rounded-2xl bg-chatbot-bg')}>
           {appChatListDataLoading && (
             <Loading type='app' />
@@ -110,7 +112,9 @@ const Chatbot = () => {
         </div>
       </div>
       {/* powered by */}
-      {isMobile && (
+      {
+        /*
+        isMobile && (
         <div className='flex h-[60px] shrink-0 items-center pl-2'>
           {!appData?.custom_config?.remove_webapp_brand && (
             <div className={cn(
@@ -127,7 +131,9 @@ const Chatbot = () => {
             </div>
           )}
         </div>
-      )}
+      )*/
+    }
+
     </div>
   )
 }

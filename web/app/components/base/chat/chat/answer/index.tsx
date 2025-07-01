@@ -36,6 +36,7 @@ type AnswerProps = {
   appData?: AppData
   noChatInput?: boolean
   switchSibling?: (siblingMessageId: string) => void
+  showUserTips: boolean
 }
 const Answer: FC<AnswerProps> = ({
   item,
@@ -50,6 +51,7 @@ const Answer: FC<AnswerProps> = ({
   appData,
   noChatInput,
   switchSibling,
+  showUserTips
 }) => {
   const { t } = useTranslation()
   const {
@@ -168,6 +170,11 @@ const Answer: FC<AnswerProps> = ({
             {
               content && !hasAgentThoughts && (
                 <BasicContent item={item} />
+              )
+            }
+            {
+              !responding && showUserTips && (
+                <div style={{marginTop:'20px',color: '#699696'}}>【如果您对解决方案不满意，请联系人工客服: 0471-6215555】</div>
               )
             }
             {

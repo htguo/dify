@@ -87,9 +87,16 @@ class LLMGenerator:
     @classmethod
     def generate_suggested_questions_after_answer(cls, tenant_id: str, histories: str):
         output_parser = SuggestedQuestionsAfterAnswerOutputParser()
-        format_instructions = output_parser.get_format_instructions()
+        # format_instructions = output_parser.get_format_instructions()
+        format_instructions = (
+            '请帮我预测人类最有可能问的三个问题，'
+            '并将每个问题限制在20个字符以内。\n'
+            '确保使用中文输出。'
+            '输出必须是符合指定架构的JSON格式的数组：\n'
+            '["问题1","问题2"."提问3"]\n'
+        )
 
-        prompt_template = PromptTemplateParser(template="{{histories}}\n{{format_instructions}}\nquestions:\n")
+        prompt_template = PromptTemplateParser(template="{{histories}}\n{{format_instructions}}\n问题是:\n")
 
         prompt = prompt_template.format({"histories": histories, "format_instructions": format_instructions})
 

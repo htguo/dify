@@ -501,7 +501,8 @@ x-shared-env: &shared-api-worker-env
 services:
   # API service
   api:
-    image: langgenius/dify-api:1.4.1
+#    image: langgenius/dify-api:1.4.1
+    image: dify-api-custom:1.4.1
     restart: always
     environment:
       # Use the shared environment variables.
@@ -556,7 +557,8 @@ services:
 
   # Frontend web application.
   web:
-    image: langgenius/dify-web:1.4.1
+    image: dify-web-custom:1.4.1
+#    image: langgenius/dify-web:1.4.1
     restart: always
     environment:
       CONSOLE_API_URL: ${CONSOLE_API_URL:-}
@@ -578,6 +580,9 @@ services:
       ENABLE_WEBSITE_JINAREADER: ${ENABLE_WEBSITE_JINAREADER:-true}
       ENABLE_WEBSITE_FIRECRAWL: ${ENABLE_WEBSITE_FIRECRAWL:-true}
       ENABLE_WEBSITE_WATERCRAWL: ${ENABLE_WEBSITE_WATERCRAWL:-true}
+    volumes:
+      # Mount the storage directory to the container, for storing user files.
+      - ./volumes:/app/web/storage
   # The postgres database.
   db:
     image: postgres:15-alpine
@@ -656,7 +661,8 @@ services:
       PLUGIN_REMOTE_INSTALLING_HOST: ${PLUGIN_DEBUGGING_HOST:-0.0.0.0}
       PLUGIN_REMOTE_INSTALLING_PORT: ${PLUGIN_DEBUGGING_PORT:-5003}
       PLUGIN_WORKING_PATH: ${PLUGIN_WORKING_PATH:-/app/storage/cwd}
-      FORCE_VERIFYING_SIGNATURE: ${FORCE_VERIFYING_SIGNATURE:-true}
+      FORCE_VERIFYING_SIGNATURE: false
+      THIRD_PARTY_SIGNATURE_VERIFICATION_ENABLED: false
       PYTHON_ENV_INIT_TIMEOUT: ${PLUGIN_PYTHON_ENV_INIT_TIMEOUT:-120}
       PLUGIN_MAX_EXECUTION_TIMEOUT: ${PLUGIN_MAX_EXECUTION_TIMEOUT:-600}
       PIP_MIRROR_URL: ${PIP_MIRROR_URL:-}

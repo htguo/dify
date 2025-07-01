@@ -8,6 +8,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useMemo
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
@@ -212,6 +213,21 @@ const Chat: FC<ChatProps> = ({
 
   const hasTryToAsk = config?.suggested_questions_after_answer?.enabled && !!suggestedQuestions?.length && onSend
 
+  const showNiceTips:boolean = useMemo(()=>{
+    if(chatList.length < 3 || !chatList[chatList.length-1].isAnswer) {
+      return false
+    }
+    let answerList = chatList.filter(item=>item.isAnswer)
+    if (answerList.length < 3) return false
+
+    let lastIndex = answerList.length - 1
+    let a1 = answerList[lastIndex - 2]
+    let a2 = answerList[lastIndex - 1]
+    let a3 = answerList[lastIndex]
+    return a1.content === a2.content && a2.content === a3.content
+
+  }, [chatList])
+
   return (
     <ChatContextProvider
       config={config}
@@ -237,8 +253,9 @@ const Chat: FC<ChatProps> = ({
             ref={chatContainerInnerRef}
             className={cn('w-full', !noSpacing && 'px-8', chatContainerInnerClassName)}
           >
-            {
+            { 
               chatList.map((item, index) => {
+
                 if (item.isAnswer) {
                   const isLast = item.id === chatList[chatList.length - 1]?.id
                   return (
@@ -256,6 +273,7 @@ const Chat: FC<ChatProps> = ({
                       hideProcessDetail={hideProcessDetail}
                       noChatInput={noChatInput}
                       switchSibling={switchSibling}
+                      showUserTips={isLast && showNiceTips}
                     />
                   )
                 }
