@@ -174,7 +174,7 @@ const Answer: FC<AnswerProps> = ({
             }
             {
               !responding && showUserTips && (
-                <div style={{marginTop:'20px',color: '#699696'}}>【如果您对解决方案不满意，请联系人工客服: 0471-6215555】</div>
+                <div style={{marginTop:'20px',fontSize: '0.85rem', color: '#E4773E'}}>【温馨提示：若上述回答未解决您的问题，请联系人工客服 0471-6215186】</div>
               )
             }
             {

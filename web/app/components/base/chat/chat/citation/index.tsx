@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RiArrowDownSLine } from '@remixicon/react'
 import type { CitationItem } from '../type'
-import Popup from './popup'
+import Popup from './popup-preview'
 
 export type Resources = {
   documentId: string

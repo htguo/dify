@@ -23,6 +23,7 @@ import DifyLogo from '@/app/components/base/logo/dify-logo'
 import cn from '@/utils/classnames'
 import useDocumentTitle from '@/hooks/use-document-title'
 import { useGlobalPublicStore } from '@/context/global-public-context'
+import FontResizeBar from './font-resize-bar'
 
 const Chatbot = () => {
   const {
@@ -88,7 +89,7 @@ const Chatbot = () => {
       <div
         className={cn(
           'flex flex-col rounded-2xl border border-components-panel-border-subtle',
-          isMobile ? 'h-[calc(100vh_-_60px)] border-[0.5px] border-components-panel-border shadow-xs' : 'h-[100vh] bg-chatbot-bg',
+          isMobile ? 'h-[calc(100vh_-_60px)] border-[0.5px] border-components-panel-border shadow-xs' : 'h-[calc(100vh_-_40px)] bg-chatbot-bg',
         )}
         style={isMobile ? Object.assign({}, CssTransform(themeBuilder?.theme?.backgroundHeaderColorStyle ?? '')) : {}}
       >
@@ -102,6 +103,7 @@ const Chatbot = () => {
           onCreateNewChat={handleNewConversation}
         />
          */}
+        <FontResizeBar />
         <div className={cn('flex grow flex-col overflow-y-auto', isMobile && '!h-[calc(100vh_-_3rem)] rounded-2xl bg-chatbot-bg')}>
           {appChatListDataLoading && (
             <Loading type='app' />
@@ -111,6 +113,7 @@ const Chatbot = () => {
           )}
         </div>
       </div>
+
       {/* powered by */}
       {
         /*

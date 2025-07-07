@@ -209,6 +209,7 @@ const ChatInputArea = ({
                 onDragLeave={handleDragFileLeave}
                 onDragOver={handleDragFileOver}
                 onDrop={handleDropFile}
+                style={{fontSize: '1rem'}}
               />
             </div>
             {

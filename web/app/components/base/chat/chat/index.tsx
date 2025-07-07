@@ -217,6 +217,14 @@ const Chat: FC<ChatProps> = ({
     if(chatList.length < 3 || !chatList[chatList.length-1].isAnswer) {
       return false
     }
+
+    let questionList = chatList.filter(item=>!item.isAnswer)
+    let questionCount = questionList.length
+    if(questionCount < 2) return false
+    if(questionList[questionCount-1].content === questionList[questionCount-2].content) {
+      return true
+    }
+
     let answerList = chatList.filter(item=>item.isAnswer)
     if (answerList.length < 3) return false
 
@@ -224,7 +232,8 @@ const Chat: FC<ChatProps> = ({
     let a1 = answerList[lastIndex - 2]
     let a2 = answerList[lastIndex - 1]
     let a3 = answerList[lastIndex]
-    return a1.content === a2.content && a2.content === a3.content
+
+    return a3.content.startsWith('对不起') || a1.content === a2.content && a2.content === a3.content
 
   }, [chatList])
 
@@ -246,12 +255,11 @@ const Chat: FC<ChatProps> = ({
       <div className='relative h-full'>
         <div
           ref={chatContainerRef}
-          className={cn('relative h-full overflow-y-auto overflow-x-hidden', chatContainerClassName)}
-        >
+          className={cn('relative h-full overflow-y-auto overflow-x-hidden', chatContainerClassName)} style={{marginRight: '3px', scrollbarWidth:'none'}}>
           {chatNode}
           <div
             ref={chatContainerInnerRef}
-            className={cn('w-full', !noSpacing && 'px-8', chatContainerInnerClassName)}
+            className={cn('w-full', !noSpacing && 'px-8', chatContainerInnerClassName)} style={{paddingTop: '30px'}}
           >
             { 
               chatList.map((item, index) => {

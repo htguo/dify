@@ -3,6 +3,7 @@ import hashlib
 import os
 import uuid
 from typing import Any, Literal, Union
+import json
 
 from flask_login import current_user
 from werkzeug.exceptions import NotFound
@@ -18,6 +19,7 @@ from core.file import helpers as file_helpers
 from core.rag.extractor.extract_processor import ExtractProcessor
 from extensions.ext_database import db
 from extensions.ext_storage import storage
+from models import Document
 from models.account import Account
 from models.enums import CreatorUserRole
 from models.model import EndUser, UploadFile
@@ -25,6 +27,8 @@ from models.model import EndUser, UploadFile
 from .errors.file import FileTooLargeError, UnsupportedFileTypeError
 
 PREVIEW_WORDS_LIMIT = 3000
+import logging
+logger = logging.getLogger(__name__)
 
 
 class FileService:
@@ -187,11 +191,12 @@ class FileService:
     @staticmethod
     def get_file_generator_by_file_id(file_id: str, timestamp: str, nonce: str, sign: str):
         result = file_helpers.verify_file_signature(upload_file_id=file_id, timestamp=timestamp, nonce=nonce, sign=sign)
+        logger.info(f"======={file_id} --- check result: {result}")
         if not result:
             raise NotFound("File not found or signature is invalid")
 
         upload_file = db.session.query(UploadFile).filter(UploadFile.id == file_id).first()
-
+        logger.info(f"======= {file_id} --- upload_file: {upload_file}")
         if not upload_file:
             raise NotFound("File not found or signature is invalid")
 
@@ -214,3 +219,13 @@ class FileService:
         generator = storage.load(upload_file.key)
 
         return generator, upload_file.mime_type
+
+    @staticmethod
+    def get_file_id_by_doc_id(doc_id: str):
+        doc = db.session.query(Document).filter(Document.id == doc_id).first()
+        if not doc:
+            return None
+        data_source_info = doc.data_source_info
+        if not data_source_info:
+            raise None
+        return json.loads(data_source_info).get("upload_file_id")

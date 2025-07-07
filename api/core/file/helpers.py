@@ -68,12 +68,20 @@ def verify_image_signature(*, upload_file_id: str, timestamp: str, nonce: str, s
     current_time = int(time.time())
     return current_time - int(timestamp) <= dify_config.FILES_ACCESS_TIMEOUT
 
+def generate_file_preview_signature(upload_file_id: str, timestamp: str, nonce: str) -> str:
+    data_to_sign = f"file-preview|{upload_file_id}|{timestamp}|{nonce}"
+    secret_key = dify_config.SECRET_KEY.encode()
+    recalculated_sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
+    return base64.urlsafe_b64encode(recalculated_sign).decode()
 
+import logging
+logger = logging.getLogger(__name__)
 def verify_file_signature(*, upload_file_id: str, timestamp: str, nonce: str, sign: str) -> bool:
     data_to_sign = f"file-preview|{upload_file_id}|{timestamp}|{nonce}"
     secret_key = dify_config.SECRET_KEY.encode()
     recalculated_sign = hmac.new(secret_key, data_to_sign.encode(), hashlib.sha256).digest()
     recalculated_encoded_sign = base64.urlsafe_b64encode(recalculated_sign).decode()
+    logger.info(f"======== recalculated_encoded_sign ======== {recalculated_encoded_sign}")
 
     # verify signature
     if sign != recalculated_encoded_sign:
